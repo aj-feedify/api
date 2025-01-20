@@ -1,5 +1,6 @@
 import hash
 import validator
+import gen_jwt
 
 
 def login(user_login, supabase) -> dict:
@@ -12,7 +13,7 @@ def login(user_login, supabase) -> dict:
     try:
         response = (
             supabase.table("users")
-            .select("password")
+            .select("id, password")
             .eq("username", user_login.username)
             .execute()
         )
@@ -25,4 +26,10 @@ def login(user_login, supabase) -> dict:
     if hashed_password != response.data[0]["password"]:
         return {"ok": False, "message": "Invalid credentials"}
 
-    return {"ok": True, "message": "Login successful"}
+    id = gen_jwt.generate_jwt(response.data[0]["id"])
+
+    return {
+        "ok": True,
+        "message": "Login successful",
+        "data": {"id": id},
+    }

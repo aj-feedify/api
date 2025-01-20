@@ -1,6 +1,6 @@
-from datetime import datetime
 import hash
 import validator
+import gen_jwt
 
 
 def signup(user_signup, supabase) -> dict:
@@ -25,7 +25,13 @@ def signup(user_signup, supabase) -> dict:
     except Exception as e:
         return {"ok": False, "message": str(e)}
 
-    return {"ok": True, "message": "Signup successful"}
+    id = gen_jwt.generate_jwt(response.data[0]["id"])
+
+    return {
+        "ok": True,
+        "message": "Signup successful",
+        "data": {"id": id},
+    }
 
 
 def unique_username(username: str, supabase) -> dict:
