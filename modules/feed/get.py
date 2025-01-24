@@ -9,7 +9,7 @@ def get(user_id: int, feed_id: int, supabase) -> dict:
     try:
         response = (
             supabase.table("feeds")
-            .select("text, created_at, updated_at, uid")
+            .select("title, text, created_at, updated_at, uid")
             .eq("user_id", user_id)
             .eq("feed_id", feed_id)
             .execute()
@@ -30,7 +30,7 @@ def get_all(user_id: int, supabase) -> dict:
     try:
         response = (
             supabase.table("feeds")
-            .select("text, created_at, updated_at, uid")
+            .select("title, text, created_at, updated_at, uid")
             .eq("user_id", user_id)
             .execute()
         )
