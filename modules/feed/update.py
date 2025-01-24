@@ -5,6 +5,7 @@ import validator
 
 def update(feed_update, supabase) -> dict:
     is_valid_feed = validator.valid_update_input(
+        title=feed_update.new_title,
         text=feed_update.new_text,
         user_id=feed_update.user_id,
         feed_id=feed_update.feed_id,
@@ -23,7 +24,13 @@ def update(feed_update, supabase) -> dict:
 
         response = (
             supabase.table("feeds")
-            .update({"text": feed_update.new_text, "updated_at": now})
+            .update(
+                {
+                    "text": feed_update.new_text,
+                    "title": feed_update.new_title,
+                    "updated_at": now,
+                }
+            )
             .eq("user_id", feed_update.user_id)
             .eq("feed_id", feed_update.feed_id)
             .execute()
@@ -44,7 +51,13 @@ def update(feed_update, supabase) -> dict:
 
 def different_input(feed_update, supabase) -> dict:
     feed_data = get(feed_update.user_id, feed_update.feed_id, supabase)
-    if feed_data["ok"] and feed_data["data"]["text"] == feed_update.new_text:
+    if not feed_data["ok"]:
+        return feed_data
+
+    if (
+        feed_data["data"]["text"] == feed_update.new_text
+        and feed_data["data"]["title"] == feed_update.new_title
+    ):
         return {"ok": False, "message": "Same input"}
 
     return {"ok": True, "message": "Different input"}

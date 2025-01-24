@@ -8,6 +8,7 @@ supabase = database.init()
 
 
 class FeedCreate(BaseModel):
+    title: str
     text: str
     user_id: int
 
@@ -25,13 +26,14 @@ def feed_get(user_id: int, feed_identifier: str):
         feed_id = int(feed_identifier)
         return feed_module.get(user_id, feed_id, supabase)
     except ValueError:
-        return {"error": "Invalid feed identifier"}
+        return {"ok": False, "message": "Invalid feed identifier"}
 
 
 class FeedUpdate(BaseModel):
-    new_text: str
     user_id: int
     feed_id: int
+    new_title: str
+    new_text: str
 
 
 @router.put("/feed/update")
