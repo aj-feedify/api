@@ -1,4 +1,4 @@
-from .validator_checks import validator_checks
+from .validator_checks import validator_checks, validator_checks_dict
 
 
 def valid_id(id: int) -> dict:
@@ -46,9 +46,4 @@ def valid_user(
         valid_name(name) if name else {"ok": True},
         valid_id(id) if id else {"ok": True},
     ]
-
-    for condition in validation_conditions:
-        if not condition["ok"]:
-            return condition
-
-    return {"ok": True, "message": "User is valid"}
+    return validator_checks_dict(validation_conditions, "User is valid")
