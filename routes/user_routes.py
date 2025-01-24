@@ -30,7 +30,7 @@ def user_login(user_login: UserLogin):
 
 class UserUpdateName(BaseModel):
     id: int
-    name: str
+    new_name: str
 
 
 @router.put("/user/update/name")

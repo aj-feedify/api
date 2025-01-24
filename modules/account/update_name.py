@@ -3,7 +3,7 @@ import validator
 
 def update_name(user_update_name, supabase):
     is_valid_user: dict = validator.valid_user(
-        id=user_update_name.id, name=user_update_name.name
+        id=user_update_name.id, name=user_update_name.new_name
     )
     if not is_valid_user["ok"]:
         return is_valid_user
@@ -11,7 +11,7 @@ def update_name(user_update_name, supabase):
     try:
         response = (
             supabase.table("users")
-            .update({"name": user_update_name.name})
+            .update({"name": user_update_name.new_name})
             .eq("id", user_update_name.id)
             .execute()
         )
