@@ -8,7 +8,7 @@ def update(feed_update, supabase) -> dict:
         title=feed_update.new_title,
         text=feed_update.new_text,
         user_id=feed_update.user_id,
-        feed_id=feed_update.feed_id,
+        feed_uid=feed_update.feed_uid,
     )
     if not is_valid_feed["ok"]:
         return is_valid_feed
@@ -18,9 +18,8 @@ def update(feed_update, supabase) -> dict:
         return is_different_input
 
     try:
-        now = datetime.now().strftime("%Y-%m-%d %H:%M:%S.") + str(
-            datetime.now().microsecond
-        ).zfill(6)
+        now = get_cur_date()
+        print(feed_update)
 
         response = (
             supabase.table("feeds")
@@ -31,8 +30,8 @@ def update(feed_update, supabase) -> dict:
                     "updated_at": now,
                 }
             )
+            .eq("uid", feed_update.feed_uid)
             .eq("user_id", feed_update.user_id)
-            .eq("feed_id", feed_update.feed_id)
             .execute()
         )
         if not response.data:
@@ -50,14 +49,32 @@ def update(feed_update, supabase) -> dict:
 
 
 def different_input(feed_update, supabase) -> dict:
-    feed_data = get(feed_update.user_id, feed_update.feed_id, supabase)
-    if not feed_data["ok"]:
-        return feed_data
+    try:
+        response = (
+            supabase.table("feeds")
+            .select("title, text")
+            .eq("uid", feed_update.feed_uid)
+            .execute()
+        )
+        if not response.data:
+            return {"ok": False, "message": "Getting feed failed"}
+    except Exception as e:
+        return {"ok": False, "message": str(e)}
 
-    if (
-        feed_data["data"]["text"] == feed_update.new_text
-        and feed_data["data"]["title"] == feed_update.new_title
-    ):
+    is_same = (
+        response.data[0]["text"] == feed_update.new_text
+        and response.data[0]["title"] == feed_update.new_title
+    )
+
+    if is_same:
         return {"ok": False, "message": "Same input"}
 
     return {"ok": True, "message": "Different input"}
+
+
+def get_cur_date():
+    now = datetime.now().strftime("%Y-%m-%d %H:%M:%S.") + str(
+        datetime.now().microsecond
+    ).zfill(6)
+
+    return now
