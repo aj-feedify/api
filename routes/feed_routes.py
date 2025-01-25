@@ -18,14 +18,14 @@ def feed_create(feed_create: FeedCreate):
     return feed_module.create(feed_create, supabase)
 
 
-@router.get("/feed/{user_id}/{feed_identifier}")
-def feed_get(user_id: int, feed_identifier: str):
-    if feed_identifier == "all":
-        return feed_module.get_all(user_id, supabase)
-    try:
-        return feed_module.get(user_id, feed_identifier, supabase)
-    except ValueError:
-        return {"ok": False, "message": "Invalid feed identifier"}
+@router.get("/feed/{feed_uid}")
+def feed_get(feed_uid: str):
+    return feed_module.get(feed_uid, supabase)
+
+
+@router.get("/feed/{user_id}/all")
+def feed_get(user_id: int):
+    return feed_module.get_all(user_id, supabase)
 
 
 class FeedUpdate(BaseModel):
