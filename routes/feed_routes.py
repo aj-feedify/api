@@ -23,8 +23,7 @@ def feed_get(user_id: int, feed_identifier: str):
     if feed_identifier == "all":
         return feed_module.get_all(user_id, supabase)
     try:
-        feed_id = int(feed_identifier)
-        return feed_module.get(user_id, feed_id, supabase)
+        return feed_module.get(user_id, feed_identifier, supabase)
     except ValueError:
         return {"ok": False, "message": "Invalid feed identifier"}
 
