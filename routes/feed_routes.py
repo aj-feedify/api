@@ -30,7 +30,7 @@ def feed_get(user_id: int):
 
 class FeedUpdate(BaseModel):
     user_id: int
-    feed_id: int
+    feed_uid: str
     new_title: str
     new_text: str
 

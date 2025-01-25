@@ -19,15 +19,6 @@ def valid_text(text: str) -> dict:
     return validator_checks(validation_conditions, "Text is valid")
 
 
-def valid_id(id: int) -> dict:
-    validation_conditions = [
-        (not isinstance(id, int), "ID must be a number"),
-        (id < 1, "ID must be greater than 0"),
-    ]
-
-    return validator_checks(validation_conditions, "ID is valid")
-
-
 def valid_uid(uid: str) -> dict:
     validation_conditions = [
         (len(uid) != 11, "UID must be 11 characters long"),
@@ -37,12 +28,12 @@ def valid_uid(uid: str) -> dict:
     return validator_checks(validation_conditions, "UID is valid")
 
 
-def valid_update_input(title: str, text: str, user_id: int, feed_id: int) -> dict:
+def valid_update_input(title: str, text: str, user_id: int, feed_uid: str) -> dict:
     validation_conditions = [
         valid_title(title),
         valid_text(text),
         valid_user_id(user_id),
-        valid_id(feed_id),
+        valid_uid(feed_uid),
     ]
     return validator_checks_dict(validation_conditions, "Update input is valid")
 
