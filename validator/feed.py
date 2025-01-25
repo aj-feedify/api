@@ -37,11 +37,6 @@ def valid_uid(uid: str) -> dict:
     return validator_checks(validation_conditions, "UID is valid")
 
 
-def valid_get_input(user_id: int, feed_uid: str) -> dict:
-    validation_conditions = [valid_user_id(user_id), valid_uid(feed_uid)]
-    return validator_checks_dict(validation_conditions, "Get input is valid")
-
-
 def valid_update_input(title: str, text: str, user_id: int, feed_id: int) -> dict:
     validation_conditions = [
         valid_title(title),

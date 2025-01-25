@@ -1,16 +1,15 @@
 import validator
 
 
-def get(user_id: int, feed_uid: str, supabase) -> dict:
-    is_valid_get_input = validator.valid_get_input(user_id, feed_uid)
-    if not is_valid_get_input["ok"]:
-        return is_valid_get_input
+def get(feed_uid: str, supabase) -> dict:
+    is_valid_uid = validator.valid_uid(feed_uid)
+    if not is_valid_uid["ok"]:
+        return is_valid_uid
 
     try:
         response = (
             supabase.table("feeds")
-            .select("title, text, created_at, updated_at, uid")
-            .eq("user_id", user_id)
+            .select("user_id, title, text, created_at, updated_at, uid")
             .eq("uid", feed_uid)
             .execute()
         )
@@ -30,7 +29,7 @@ def get_all(user_id: int, supabase) -> dict:
     try:
         response = (
             supabase.table("feeds")
-            .select("title, text, created_at, updated_at, uid")
+            .select("title, created_at, updated_at, uid")
             .eq("user_id", user_id)
             .execute()
         )
