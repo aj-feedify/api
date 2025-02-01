@@ -1,5 +1,4 @@
 from datetime import datetime
-from .get import get
 import validator
 
 
@@ -18,8 +17,7 @@ def update(feed_update, supabase) -> dict:
         return is_different_input
 
     try:
-        now = get_cur_date()
-        print(feed_update)
+        now = datetime.utcnow().isoformat()
 
         response = (
             supabase.table("feeds")
@@ -70,11 +68,3 @@ def different_input(feed_update, supabase) -> dict:
         return {"ok": False, "message": "Same input"}
 
     return {"ok": True, "message": "Different input"}
-
-
-def get_cur_date():
-    now = datetime.now().strftime("%Y-%m-%d %H:%M:%S.") + str(
-        datetime.now().microsecond
-    ).zfill(6)
-
-    return now

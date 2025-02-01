@@ -13,3 +13,4 @@ app.add_middleware(
 )
 app.include_router(routes.user_routes.router)
 app.include_router(routes.feed_routes.router)
+app.include_router(routes.response_routes.router)
