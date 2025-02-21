@@ -3,7 +3,7 @@ from pydantic import BaseModel
 import modules.feed as feed_module
 import database
 
-router = APIRouter()
+router = APIRouter(tags=["feed"])
 supabase = database.init()
 
 
