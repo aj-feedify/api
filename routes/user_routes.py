@@ -3,7 +3,7 @@ from pydantic import BaseModel
 import modules.account as account_module
 import database
 
-router = APIRouter()
+router = APIRouter(tags=["user"])
 supabase = database.init()
 
 
